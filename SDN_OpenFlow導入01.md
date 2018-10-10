@@ -1,6 +1,6 @@
 ## AACネットワーク分科会 SDN勉強会第１回目（OpenFlowの紹介とハンズオン）システム技術部：島内 (2015/12/15)
 
-## OpenFlowとは？
+### OpenFlowとは？
 以下、JPNICのサイトからの引用
 > 制御機能と転送機能が共存する既存のネットワーク機器とは異なり、OpenFlowでは、制御部と転送部を分離したアーキテクチャを採用しています。  
 > ネットワーク管理者は、OpenFlowコントローラと呼ばれる制御部を、自ら設計・実装することで、必要な制御機能を自由に実現することができます。
@@ -8,28 +8,28 @@
 詳しくはこちらをご参照
 [引用元:]https://www.nic.ad.jp/ja/newsletter/No52/0800.html
 
-## つくってみる
+### つくってみる
 というOpenFlowを用いて、ミニマムなSDNを作成してブログ的にまとめてみましたので、それを元に時間の許す限りハンズオンしたいと思います。  
 （社内勉強会なこともありユルい感じで進みますがご容赦ください。）
 
 まず、今回のゴールは『以下の構成をOpenFlowを用いて構築し、Node1/Node2間でのping疎通を通すこと』です。  
 
-![fig1](https://github.com/niruneru/documents/tree/media/01_01.gif)
+![01_01](https://github.com/niruneru/documents/blob/media/01_01.gif)
 
 使用するOS・OSSは以下の通りです。  
 - CentOS 7.1
 - Open vSwitch 2.4.0 (仮想スイッチ)
 - OpenDayLight Lithium SR-2(OpenFlowコントローラ)
 
-###1. Open vSwitchのインストール
+### 1. Open vSwitchのインストール
 yum searchしても見つからず、調べたところ、、、
-- ①ソースをダウンロードしてmake installする。
-- ②RDOのリポジトリからインストールする。
+- ソースをダウンロードしてmake installする。
+- RDOのリポジトリからインストールする。
 のどちらかを選択する必要があるそうです。	
-私は②の方法で実施しました。RDOはRedHatのOpenstackユーザを支援するコミュニティだそうです。  
+私は後者の方法で実施しました。RDOはRedHatのOpenstackユーザを支援するコミュニティだそうです。  
 で、そのRDO公式サイトに行くと、トップページにQuickstartへの誘導があったので、そこをポチっとすると  
 
-![fig2](https://github.com/niruneru/documents/tree/media/01_02.gif)
+![01_02](https://github.com/niruneru/documents/blob/media/01_02.gif)
 
 ということで、Step1まで実施してリポジトリを追加します。  
 ```
@@ -233,18 +233,18 @@ OpenDayLightは、環境変数JAVA_HOMEに記載されているJVMを使って�
 公式サイトに行きます。
 
 
-![fig3](https://github.com/niruneru/documents/tree/media/01_03.gif)
+![01_03](https://github.com/niruneru/documents/blob/media/01_03.gif)
 
 下の方にDOWNLOAD NOWがあるので、これをクリックすると
 
 
-![fig4](https://github.com/niruneru/documents/tree/media/01_04.gif)
+![01_04](https://github.com/niruneru/documents/blob/media/01_04.gif)
 
 
 
 一覧が出ます。お目当てのLithium-SR2のPre-Built Tar FileのダウンロードURLをコピーして、curlかwgetあたりで取得します。
 
-![fig5](https://github.com/niruneru/documents/tree/media/01_05.gif)
+![fig5](https://github.com/niruneru/documents/blob/media/01_05.gif)
 
 ```
 [remote ~]$
@@ -326,9 +326,10 @@ DB Schema 7.12.1
 続いて、OpenDayLightの起動確認を行います。ダウンロードしたtarを解凍・展開したユーザで展開したディレクトリ内に入り、./bin/karafと打ちます。
 ※ついでに長ったらしいディレクトリ名を変更しています。
 なお、binの下のコマンドですが
-./start：バックグラウンド実行
-./client：Karaf Consoleへ接続する。（バックグランド実行したあとなどに利用する）
-./status：OpenDaylightの動作状況の確認。
+- ./start：バックグラウンド実行
+- ./client：Karaf Consoleへ接続する。（バックグランド実行したあとなどに利用する）
+- ./status：OpenDaylightの動作状況の確認  
+などとなっています。  
 
 ```
 [remote ~]$ mv distribution-karaf-0.3.2-Lithium-SR2 OpenDaylight-Lithium-SR2
@@ -357,13 +358,13 @@ opendaylight-user@root>
 ### 5. GUIによる管理を提供するOpenDayLightのDLUX
 DLUXを使用すると、WebブラウザのGUIを通して仮想ネットワークの管理を行うことができます。こんな画面です。↓(これは画像検索で拾ったもの)
 
-![fig6](https://github.com/niruneru/documents/tree/media/01_06.gif)
+![fig6](https://github.com/niruneru/documents/blob/media/01_06.gif)
 
 まず、トップページにアクセスします。ブラウザから  
 `http://OpenDayLightをインストールしたホストのアドレス:8181/dlux/index.html`  
 へアクセスします。  
 
-![fig7](https://github.com/niruneru/documents/tree/media/01_07.gif)
+![fig7](https://github.com/niruneru/documents/blob/media/01_07.gif)
 
 CentOS側のfirewallの設定を見直します。
 ```
@@ -462,13 +463,13 @@ dhcpv6-client opendaylight ssh
 
 
 
-![fig8](https://github.com/niruneru/documents/tree/media/01_08.gif)
+![fig8](https://github.com/niruneru/documents/blob/media/01_08.gif)
 
 
 
-やっぱり駄目でした。そもそもインストールしただけではDLUXを使うための基本的なプラグインが入っていないとのことです。
-というわけでプラグインを追加します。
-まず、今入っているプラグインを確認します。
+やっぱり駄目でした。調べたところ、そもそもインストールしただけではDLUXを使うための基本的なプラグインが入っていないとのことです。
+というわけでプラグインを追加します。  
+まず、今入っているプラグインを確認します。  
 ```
 [remote openDayLight-Lithium-SR2]$ ./bin/karaf
 OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=512m; support was removed in 8.0
@@ -497,15 +498,18 @@ kar        | 3.0.3   | x         | standard-3.0.3 | Provide KAR (KARaf archive) 
 ssh        | 3.0.3   | x         | standard-3.0.3 | Provide a SSHd server on Karaf
 management | 3.0.3   | x         | standard-3.0.3 | Provide a JMX MBeanServer and a set of MBeans in K
 opendaylight-user@root>
+
 ```
-確かになんか少ない気がします。実はこれだけではDLUXはおろか、コントローラとして機能しないとのこと。。。  
+実はこれだけではDLUXはおろか、コントローラとして機能しないとのこと。。。  
 featureを追加します。コマンドはfeature:installです。打ってもしばらく応答がありませんが気長に待ちます。  
+
 ```
 opendaylight-user@root>feature:install odl-dlux-core odl-restconf odl-mdsal-apidocs odl-l2switch-switch
 opendaylight-user@root>
 
 ```
-特に成功とも失敗とも出ませんが、一応feature:list -iで確認すると。。。
+特に成功とも失敗とも出ませんが、一応feature:list -iで確認すると。。。  
+
 ```
 opendaylight-user@root>feature:list -i
 Name                                 | Version           | Installed | Repository                               | Description
@@ -575,29 +579,30 @@ odl-mdsal-distributed-datastore      | 1.2.2-Lithium-SR2 | x         | odl-mdsal
 odl-mdsal-remoterpc-connector        | 1.2.2-Lithium-SR2 | x         | odl-mdsal-1.2.2-Lithium-SR2              |
 odl-mdsal-broker                     | 1.2.2-Lithium-SR2 | x         | odl-mdsal-1.2.2-Lithium-SR2              |
 opendaylight-user@root>
+
 ```
 
 がっつり追加されました。  
 では今度こそ、、、。
 
 
-![fig9](https://github.com/niruneru/documents/tree/media/01_09.gif)
+![fig9](https://github.com/niruneru/documents/blob/media/01_09.gif)
 
 
-404に変わりました。  
+404に変わりました。一歩前進です。  
 Lithiumからトップページへのパスが変わったようで、～/dlux/index.htmlではなく、～/index.htmlで行けました。  
 
 
-![fig10](https://github.com/niruneru/documents/tree/media/01_10.gif)
+![fig10](https://github.com/niruneru/documents/blob/media/01_10.gif)
 
 
 やっと表示されました。ここでadmin/adminでログインします。(ただし、認証モジュールが立ち上がるのが遅いのか、少し時間が経ってからでないとログインできないです）
 
 
-![fig11](https://github.com/niruneru/documents/tree/media/01_11.gif)
+![fig11](https://github.com/niruneru/documents/blob/media/01_11.gif)
 
 
 まだスイッチも何も作成していないため画面は真っ白です。  
   
-長くなったので１回目はここまでとします。  
+長くなったので第１回目はここまでとします。  
 仮想スイッチとコントローラのソフトウェアについて、インストールおよび起動確認までは完了したので、次回はいよいよ仮想スイッチを作成します。  
